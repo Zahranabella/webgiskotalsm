@@ -151,21 +151,30 @@ function handlePopupLayer(
       });
 
     if (url) {
-      console.log(url);
-      $.getJSON(url, function (data) {
-        var feature = data.features[0];
-        var props = feature.properties;
-        var popupContent = Object.entries(extraProperties)
-          .map(
-            ([key, label]) => `<div><strong>${label}:</strong> ${props[key]}</div>`
-          )
-          .join(" ");
-        content.innerHTML = popupContent;
-        popup.setPosition(evt.coordinate);
-      });
+  console.log("Feature Info URL:", url);
+  $.getJSON(url, function (data) {
+    console.log("Feature Info Response:", data);
+    if (data.features && data.features.length > 0) {
+      var feature = data.features[0];
+      var props = feature.properties;
+      var popupContent = Object.entries(extraProperties)
+        .map(
+          ([key, label]) => `<div><strong>${label}:</strong> ${props[key]}</div>`
+        )
+        .join(" ");
+      content.innerHTML = popupContent;
+      popup.setPosition(evt.coordinate);
     } else {
+      console.log("No features found");
       popup.setPosition(undefined);
     }
+  }).fail(function (error) {
+    console.error("Error fetching feature info:", error);
+  });
+} else {
+  console.log("Invalid Feature Info URL");
+  popup.setPosition(undefined);
+}
   });
 }
 
