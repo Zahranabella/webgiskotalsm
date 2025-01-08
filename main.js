@@ -147,6 +147,7 @@ function handlePopupLayer(
       .getSource()
       .getFeatureInfoUrl(evt.coordinate, resolution, "EPSG:3857", {
         INFO_FORMAT: "application/json",
+        QUERY_LAYERS: layerName.toLowerCase(),  // Pastikan layer yang tepat dicari
         propertyName: featureInfoProperties,
       });
 
