@@ -34,7 +34,7 @@ var createLayer = function (title, layerName) {
   return new ol.layer.Tile({
     title: title,
     source: new ol.source.TileWMS({
-      url: "https://af8a-36-91-52-250.ngrok-free.app/geoserver/gisKotaLhokseumawe/wms",
+      url: " https://1fad-36-91-52-250.ngrok-free.app/geoserver/gisKotaLhokseumawe/wms",
       params: { LAYERS: "gisKotaLhokseumawe:" + layerName, TILED: true },
       serverType: "geoserver",
       visible: true,
