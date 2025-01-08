@@ -34,7 +34,7 @@ var createLayer = function (title, layerName) {
   return new ol.layer.Tile({
     title: title,
     source: new ol.source.TileWMS({
-      url: "https://e27a-182-3-5-228.ngrok-free.app/geoserver/gisKotaLhokseumawe/wms",
+      url: "http://localhost:8080/geoserver/gisKotaLhokseumawe/wms",
       params: { LAYERS: "gisKotaLhokseumawe:" + layerName, TILED: true },
       serverType: "geoserver",
       visible: true,
@@ -147,31 +147,20 @@ function handlePopupLayer(
       .getSource()
       .getFeatureInfoUrl(evt.coordinate, resolution, "EPSG:3857", {
         INFO_FORMAT: "application/json",
-        QUERY_LAYERS: layerName.toLowerCase(),  // Pastikan layer yang tepat dicari
         propertyName: featureInfoProperties,
       });
 
     if (url) {
-      console.log(url);  // Log URL untuk memverifikasi permintaan
+      console.log(url);
       $.getJSON(url, function (data) {
-        console.log(data);  // Cek data yang diterima dari GeoServer
-        if (data.features && data.features.length > 0) {
-          var feature = data.features[0];
-          var props = feature.properties;
-          var popupContent = Object.entries(extraProperties)
-            .map(
-              ([key, label]) => `<div><strong>${label}:</strong> ${props[key]}</div>`
-            )
-            .join(" ");
-          content.innerHTML = popupContent;
-          popup.setPosition(evt.coordinate);
-        } else {
-          content.innerHTML = "<div>No data available for this feature.</div>";
-          popup.setPosition(evt.coordinate);
-        }
-      }).fail(function (error) {
-        console.error("Error fetching data:", error);  // Cek error jika permintaan gagal
-        content.innerHTML = "<div>Failed to load feature data.</div>";
+        var feature = data.features[0];
+        var props = feature.properties;
+        var popupContent = Object.entries(extraProperties)
+          .map(
+            ([key, label]) => `<div><strong>${label}:</strong> ${props[key]}</div>`
+          )
+          .join(" ");
+        content.innerHTML = popupContent;
         popup.setPosition(evt.coordinate);
       });
     } else {
